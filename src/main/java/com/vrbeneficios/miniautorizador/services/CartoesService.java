@@ -3,7 +3,7 @@ package com.vrbeneficios.miniautorizador.services;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.vrbeneficios.miniautorizador.exceptions.CartaoNaoEncontradoException;
+import com.vrbeneficios.miniautorizador.exceptions.CartaoExistenteException;
 
 @Service
 public class CartoesService {
@@ -11,9 +11,9 @@ public class CartoesService {
 	@Autowired
 	private CartoesRepository cartoesRepository;
 
-	public Cartao salvarCartao(String numeroCartao, String senha) throws CartaoNaoEncontradoException {
+	public Cartao salvarCartao(String numeroCartao, String senha) throws CartaoExistenteException {
 		if (findByNumeroCartao(numeroCartao) != null) {
-			 throw new CartaoNaoEncontradoException("cartao nao existe");
+			 throw new CartaoExistenteException("cartao existe");
 			 }
 		return cartoesRepository.save(new Cartao(numeroCartao, senha, 500.00));	
 	}

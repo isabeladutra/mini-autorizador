@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
-import com.vrbeneficios.miniautorizador.exceptions.CartaoNaoEncontradoException;
+import com.vrbeneficios.miniautorizador.exceptions.CartaoExistenteException;
 import com.vrbeneficios.miniautorizador.services.Cartao;
 import com.vrbeneficios.miniautorizador.services.CartoesService;
 
@@ -34,7 +34,7 @@ public class MiniAutorizadorApplication {
 		Cartao novoCartao = cartao;
 		try {
 			novoCartao = cartoesService.salvarCartao(cartao.getNumeroCartao(), cartao.getSenha());
-		} catch (CartaoNaoEncontradoException e) {
+		} catch (CartaoExistenteException e) {
 			return new ResponseEntity<Cartao>(novoCartao, HttpStatus.UNPROCESSABLE_ENTITY);
 			//e.printStackTrace();
 		}
