@@ -8,9 +8,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class CartaoDTO {
-	
+
 	private String numeroCartao;
 	private String senha;
-	
 
 }

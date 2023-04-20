@@ -26,7 +26,7 @@ public class CartoesService {
 		return cartoesRepository.save(new Cartao(numeroCartao, senha, 500.00));
 	}
 	
-	public void realizaTransacao(TransacaoDTO transacaoDTO) throws CartaoNaoExistenteException, SenhaInvalidaException, SaldoInsuficienteException {
+	synchronized public  void realizaTransacao(TransacaoDTO transacaoDTO) throws CartaoNaoExistenteException, SenhaInvalidaException, SaldoInsuficienteException {
 		//primeiro verificar se cartao existe
 		Cartao cartao = findByNumeroCartao(transacaoDTO.getNumeroCartao());
 		if (cartao != null) {

@@ -2,7 +2,6 @@ package com.vrbeneficios.miniautorizador.model;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
-
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -13,7 +12,7 @@ import lombok.NoArgsConstructor;
 @Document(collection = "cartoes")
 public class Cartao {
 
-	@Id 
+	@Id
 	private String numeroCartao;
 	private String senha;
 	private Double saldo;
