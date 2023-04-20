@@ -12,7 +12,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.vrbeneficios.miniautorizador.dto.CartaoDTO;
+import com.vrbeneficios.miniautorizador.dto.TransacaoDTO;
 import com.vrbeneficios.miniautorizador.exceptions.CartaoExistenteException;
+import com.vrbeneficios.miniautorizador.exceptions.CartaoNaoExistenteException;
+import com.vrbeneficios.miniautorizador.exceptions.SaldoInsuficienteException;
+import com.vrbeneficios.miniautorizador.exceptions.SenhaInvalidaException;
 import com.vrbeneficios.miniautorizador.mappers.CartaoDTOMapper;
 import com.vrbeneficios.miniautorizador.model.Cartao;
 import com.vrbeneficios.miniautorizador.services.CartoesService;
@@ -55,6 +59,18 @@ public class MiniAutorizadorApplication {
 			return new ResponseEntity<Double>(cartao.getSaldo(), HttpStatus.OK);
 		}
 		return new ResponseEntity<Double>(HttpStatus.NOT_FOUND);
+	}
+	
+	@PostMapping(value = "/transacoes")
+	public ResponseEntity<String> realizarTransacao(@RequestBody TransacaoDTO transacaoDTO) {
+		
+			try {
+				cartoesService.realizaTransacao(transacaoDTO);
+			} catch (CartaoNaoExistenteException | SenhaInvalidaException | SaldoInsuficienteException e) {
+				return new ResponseEntity<String>(e.getMessage(), HttpStatus.UNPROCESSABLE_ENTITY);
+			}
+	
+		return new ResponseEntity<String>("OK", HttpStatus.OK);
 	}
 	
 }

@@ -16,5 +16,5 @@ public class Cartao {
 	@Id 
 	private String numeroCartao;
 	private String senha;
-	private double saldo;
+	private Double saldo;
 }

@@ -7,6 +7,6 @@ public class TransacaoDTO {
 	
 	public String numeroCartao;
 	public String senhaCartao;
-	
+	public Double valor;
 
 }
