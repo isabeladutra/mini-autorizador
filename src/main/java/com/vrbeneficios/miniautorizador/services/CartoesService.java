@@ -18,6 +18,10 @@ public class CartoesService {
 
 	@Autowired
 	private CartoesRepository cartoesRepository;
+	
+	public void setCartoesRepo(CartoesRepository cartoesRepo) {
+		this.cartoesRepository = cartoesRepo;
+	}
 
 	public Cartao salvarCartao(String numeroCartao, String senha) throws CartaoExistenteException {
 		if (findByNumeroCartao(numeroCartao) != null) {

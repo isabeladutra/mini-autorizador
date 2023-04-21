@@ -26,6 +26,10 @@ public class MiniAutorizadorApplication {
 
 	@Autowired
 	CartoesService cartoesService;
+	
+	public void setCartoesService(CartoesService cartoeService) {
+		this.cartoesService = cartoeService;
+	}
 
 	public static void main(String[] args) {
 		SpringApplication.run(MiniAutorizadorApplication.class, args);
@@ -42,9 +46,7 @@ public class MiniAutorizadorApplication {
 
 		} catch (CartaoExistenteException e) {
 			returnStatusCode = HttpStatus.UNPROCESSABLE_ENTITY;
-			// return new ResponseEntity<CartaoDTO>(cartaoDTO,
-			// HttpStatus.UNPROCESSABLE_ENTITY);
-			// e.printStackTrace();
+			
 		}
 		cartaoDTO = CartaoDTOMapper.mapper(novoCartao);
 		return new ResponseEntity<CartaoDTO>(cartaoDTO, returnStatusCode);
