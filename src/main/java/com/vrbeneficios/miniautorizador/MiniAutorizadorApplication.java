@@ -20,6 +20,14 @@ import com.vrbeneficios.miniautorizador.mappers.CartaoDTOMapper;
 import com.vrbeneficios.miniautorizador.model.Cartao;
 import com.vrbeneficios.miniautorizador.services.CartoesService;
 
+import io.swagger.v3.oas.annotations.OpenAPIDefinition;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.info.Contact;
+import io.swagger.v3.oas.annotations.info.Info;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+
+@OpenAPIDefinition(info = @Info(title = "Mini-autorizador", description = "API que implementa regras de autorização para o processamento de transações de Vale Refeição e Vale Alimentação", contact = @Contact(name="Isabela Dutra", email = "dutraisabela88@gmail.com")))
 @SpringBootApplication
 @RestController
 public class MiniAutorizadorApplication {
@@ -35,7 +43,10 @@ public class MiniAutorizadorApplication {
 		SpringApplication.run(MiniAutorizadorApplication.class, args);
 	}
 
-	@PostMapping(value = "/cartoes")
+	@Operation(summary = "Cria um novo cartão", responses = {
+    @ApiResponse(responseCode = "201", description = "Cartão criado com Sucesso",content = @Content(mediaType ="application/json")),
+    @ApiResponse(responseCode = "422", description = "Falha : Cartão já existe",content = @Content(mediaType ="application/json"))})
+	@PostMapping(value = "/cartoes", consumes="application/json", produces="application/json")
 	public ResponseEntity<CartaoDTO> adicionarCartao(@RequestBody Cartao cartao) {
 		Cartao novoCartao = cartao;
 		CartaoDTO cartaoDTO = new CartaoDTO();
@@ -52,7 +63,10 @@ public class MiniAutorizadorApplication {
 		return new ResponseEntity<CartaoDTO>(cartaoDTO, returnStatusCode);
 
 	}
-
+    
+    @Operation(summary = "Consulta o saldo do cartão", responses = {
+    @ApiResponse(responseCode = "200", description = "Consulta Realizada com Sucesso", content = @Content(mediaType ="application/json")),
+    @ApiResponse(responseCode = "404", description = "Cartão Inexistente")})
 	@GetMapping(value = "/cartoes/{numeroCartao}")
 	public ResponseEntity<Double> consultarSaldoCartao(@PathVariable String numeroCartao) {
 		Cartao cartao = cartoesService.findByNumeroCartao(numeroCartao);
@@ -62,6 +76,9 @@ public class MiniAutorizadorApplication {
 		return new ResponseEntity<Double>(HttpStatus.NOT_FOUND);
 	}
 
+    @Operation(summary = "Realiza uma transação", responses = {
+    @ApiResponse(responseCode = "201", description = "Transação Realizada com Sucesso"),
+    @ApiResponse(responseCode = "422", description = "Falha na Transação")})
 	@PostMapping(value = "/transacoes")
 	public ResponseEntity<String> realizarTransacao(@RequestBody TransacaoDTO transacaoDTO) {
 
