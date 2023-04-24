@@ -2,7 +2,6 @@ package com.vrbeneficios.miniautorizador;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.when;
 
@@ -24,7 +23,7 @@ import com.vrbeneficios.miniautorizador.exceptions.SenhaInvalidaException;
 import com.vrbeneficios.miniautorizador.model.Cartao;
 import com.vrbeneficios.miniautorizador.services.CartoesService;
 
-public class MiniAutorizadorAppTests {
+public class MiniAutorizadorControllerTests {
 
 	private CartoesService cartoesService = Mockito.mock(CartoesService.class);
 	private AutoCloseable closeable;
@@ -40,7 +39,7 @@ public class MiniAutorizadorAppTests {
 
 	@Test
 	public void testaConsultarSaldoCartao() throws CartaoExistenteException {
-		MiniAutorizadorApplication app = new MiniAutorizadorApplication();
+		MiniAutorizadorController app = new MiniAutorizadorController();
 		Cartao cartao = new Cartao("12345", "abc", 500.00);
 		when(cartoesService.findByNumeroCartao(any())).thenReturn(cartao);
 		app.setCartoesService(cartoesService);
@@ -51,7 +50,7 @@ public class MiniAutorizadorAppTests {
 	
 	@Test
 	public void testaConsultarSaldoCartaoInexistente() {
-		MiniAutorizadorApplication app = new MiniAutorizadorApplication();
+		MiniAutorizadorController app = new MiniAutorizadorController();
 		when(cartoesService.findByNumeroCartao(any())).thenReturn(null);
 		app.setCartoesService(cartoesService);
 		ResponseEntity<Double> resposta = app.consultarSaldoCartao("12345");
@@ -61,7 +60,7 @@ public class MiniAutorizadorAppTests {
 
 	@Test
 	public void testaAdicionarCartao() throws CartaoExistenteException {
-		MiniAutorizadorApplication app = new MiniAutorizadorApplication();
+		MiniAutorizadorController app = new MiniAutorizadorController();
 		Cartao cartao = new Cartao("12345", "abc", 500.00);
 		app.setCartoesService(cartoesService);
 		when(cartoesService.salvarCartao(any(), any())).thenReturn(cartao);
@@ -71,7 +70,7 @@ public class MiniAutorizadorAppTests {
 	
 	@Test
 	public void testaCriarCartaoQueJaExiste() throws CartaoExistenteException {
-		MiniAutorizadorApplication app = new MiniAutorizadorApplication();
+		MiniAutorizadorController app = new MiniAutorizadorController();
 		Cartao cartao = new Cartao("12345", "abc", 500.00);
 		app.setCartoesService(cartoesService);
 		when(cartoesService.salvarCartao(any(), any())).thenThrow(CartaoExistenteException.class);
@@ -81,7 +80,7 @@ public class MiniAutorizadorAppTests {
 	
 	@Test
 	public void testaRealizarTransacao() {
-		MiniAutorizadorApplication app = new MiniAutorizadorApplication();
+		MiniAutorizadorController app = new MiniAutorizadorController();
 		TransacaoDTO transacaoDTO = new TransacaoDTO("1234", "abcd", 10.00);
 		app.setCartoesService(cartoesService);
 		ResponseEntity<String> retorno = app.realizarTransacao(transacaoDTO);
@@ -92,7 +91,7 @@ public class MiniAutorizadorAppTests {
 	
 	@Test()
 	public void testaRealizarTransacaoCartaoInvalido() throws CartaoNaoExistenteException, SenhaInvalidaException, SaldoInsuficienteException {
-		MiniAutorizadorApplication app = new MiniAutorizadorApplication();
+		MiniAutorizadorController app = new MiniAutorizadorController();
 		TransacaoDTO transacaoDTO = new TransacaoDTO("1234", "abcd", 10.00);
 		app.setCartoesService(cartoesService);
 		doThrow(CartaoNaoExistenteException.class).when(cartoesService).realizaTransacao(transacaoDTO);
@@ -102,7 +101,7 @@ public class MiniAutorizadorAppTests {
 	
 	@Test
 	public void testaRealizarTransacaoComSenhaInvalida() throws CartaoNaoExistenteException, SenhaInvalidaException, SaldoInsuficienteException {
-		MiniAutorizadorApplication app = new MiniAutorizadorApplication();
+		MiniAutorizadorController app = new MiniAutorizadorController();
 		TransacaoDTO transacaoDTO = new TransacaoDTO("1234", "abcd", 10.00);
 		app.setCartoesService(cartoesService);
 		doThrow(SenhaInvalidaException.class).when(cartoesService).realizaTransacao(transacaoDTO);
@@ -114,7 +113,7 @@ public class MiniAutorizadorAppTests {
 	
 	@Test
 	public void testaRealizarTransacaoComSaldoInsuficiente() throws CartaoNaoExistenteException, SenhaInvalidaException, SaldoInsuficienteException {
-		MiniAutorizadorApplication app = new MiniAutorizadorApplication();
+		MiniAutorizadorController app = new MiniAutorizadorController();
 		TransacaoDTO transacaoDTO = new TransacaoDTO("1234", "abcd", 10.00);
 		app.setCartoesService(cartoesService);
 		doThrow(SaldoInsuficienteException.class).when(cartoesService).realizaTransacao(transacaoDTO);
